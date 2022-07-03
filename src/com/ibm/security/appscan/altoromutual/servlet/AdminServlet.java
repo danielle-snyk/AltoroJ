@@ -119,5 +119,29 @@ public class AdminServlet extends HttpServlet {
 		response.sendRedirect("admin.jsp");
 		return ;
 	}
+	
+	public static void function1(File destDir, InputStream inputStream) throws IOException {
+       TarArchiveInputStream tin = new TarArchiveInputStream(inputStream);
+       TarArchiveEntry tarEntry = null;
+ 
+       while ((tarEntry = tin.getNextTarEntry()) != null) {
+           File destEntry = new File(destDir, tarEntry.getName());
+           File parent = destEntry.getParentFile();
+ 
+           if (!parent.exists()) {
+               parent.mkdirs();
+           }
+ 
+           if (tarEntry.isDirectory()) {
+               destEntry.mkdirs();
+           } else {
+               FileOutputStream fout = new FileOutputStream(destEntry);
+		  fout.close();
+           }
+       }
+      
+       tin.close();
+   }
+
 
 }
